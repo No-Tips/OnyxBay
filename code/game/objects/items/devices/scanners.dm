@@ -42,7 +42,7 @@ REAGENT SCANNER
 	if (!istype(C) || C.isSynthetic())
 		to_chat(user, "<span class='warning'>\The [src] is designed for organic humanoid patients only.</span>")
 		return
-	//user << browse(medical_scan_results(H, mode), "window=scanconsole;size=550x400")
+	//show_browser(user, medical_scan_results(H, mode), "window=scanconsole;size=550x400")
 	playsound(src.loc, 'sound/signals/processing21.ogg', 50)
 	ui_interact(user,target = C)
 
@@ -77,8 +77,7 @@ REAGENT SCANNER
 		ui.set_window_options("focus=0;can_close=1;can_minimize=1;can_maximize=0;can_resize=0;titlebar=1;")
 		ui.open()
 
-proc/medical_scan_results(mob/living/carbon/human/H, verbose, separate_result)
-
+/proc/medical_scan_results(mob/living/carbon/human/H, verbose, separate_result)
 	. = list()
 	var/p_name = list()
 	p_name = "<span class='notice'><b>Scan results for \the [H]:</b></span>"
@@ -375,7 +374,7 @@ proc/medical_scan_results(mob/living/carbon/human/H, verbose, separate_result)
 
 
 // Calculates severity based on the ratios defined external limbs.
-proc/get_wound_severity(damage_ratio, vital = 0)
+/proc/get_wound_severity(damage_ratio, vital = 0)
 	var/degree
 
 	switch(damage_ratio)
@@ -431,12 +430,12 @@ proc/get_wound_severity(damage_ratio, vital = 0)
 	if (istype(M,/mob/living/carbon/human))
 		dat = M.get_medical_data()
 		last_target = M
-		user << browse(dat, "window=scanconsole;size=430x600")
+		show_browser(user, dat, "window=scanconsole;size=430x600")
 	return 1
 
 /obj/item/device/healthanalyzer_advanced/attack_self(mob/user)
 	if (last_target && dat)
-		user << browse(dat, "window=scanconsole;size=430x600")
+		show_browser(user, dat, "window=scanconsole;size=430x600")
 
 /obj/item/device/healthanalyzer_advanced/examine(mob/user)
 	. = ..()
@@ -449,7 +448,7 @@ proc/get_wound_severity(damage_ratio, vital = 0)
 	if (istype(M,/mob/living/carbon/human))
 		dat = M.get_medical_data()
 		last_target = M
-		user << browse(dat, "window=scanconsole;size=430x600")
+		show_browser(user, dat, "window=scanconsole;size=430x600")
 		if(isrobot(user))
 			var/mob/living/silicon/robot/R = user
 			if(R.cell)

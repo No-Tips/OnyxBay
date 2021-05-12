@@ -117,7 +117,7 @@
 
 		dat += "<hr>"
 
-	user << browse(dat, "window=autolathe")
+	show_browser(user, dat, "window=autolathe")
 	onclose(user, "autolathe")
 
 /obj/machinery/autolathe/attackby(obj/item/O as obj, mob/user as mob)
@@ -151,7 +151,7 @@
 
 	//Resources are being loaded.
 	var/obj/item/eating = O
-	if(!user.canUnEquip(eating))
+	if(!issilicon(user) && !user.canUnEquip(eating))
 		to_chat(user, "You can't place that item inside \the [src].")
 		return
 	if(!eating.matter)
