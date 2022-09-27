@@ -18,7 +18,7 @@
     if(!volume)
         return
 
-    var/new_name = input(usr, "What would you like to name your coctail?", "Rename Coctail") as text|null
+    var/new_name = sanitize(input(usr, "What would you like to name your coctail?", "Rename Coctail") as text|null)
     if(!new_name)
         return
 
@@ -35,7 +35,7 @@
 
     to_chat(usr, SPAN("notice","You renamed your coctail to [new_name]."))
 
-    var/new_desc = input(usr, "What would you like to describe your coctail?", "Describe Coctail") as text|null
+    var/new_desc = sanitize(input(usr, "What would you like to describe your coctail?", "Describe Coctail") as text|null)
     if(!new_desc)
         return
     coctail.glass_desc = new_desc
