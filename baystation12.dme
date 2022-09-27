@@ -2572,6 +2572,7 @@
 #include "code\modules\reagents\reagent_containers\vessel\mug.dm"
 #include "code\modules\reagents\reagent_containers\vessel\paint.dm"
 #include "code\modules\reagents\reagent_containers\vessel\plastic.dm"
+#include "code\modules\reagents\reagent_containers\vessel\shaker.dm"
 #include "code\modules\reagents\reagent_containers\vessel\unsorted.dm"
 #include "code\modules\reagents\reagent_containers\vessel\glass\_glass.dm"
 #include "code\modules\reagents\reagent_containers\vessel\glass\boxes.dm"
