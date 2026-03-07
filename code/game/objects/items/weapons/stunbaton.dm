@@ -56,7 +56,7 @@
 		icon_state = "[initial(name)]"
 
 	if(icon_state == "[initial(name)]_active")
-		set_light(0.4, 0.1, 1, 2, "#ff6a00")
+		set_light(0.4, 0.1, 1, 2, "#ff88ff") // APRIL FOOLS: pink glow
 	else
 		set_light(0)
 
@@ -98,18 +98,19 @@
 	set_status(!status, user)
 	add_fingerprint(user)
 
+// APRIL FOOLS BUILD: toggle sound is a bike horn, glow is pink.
 /obj/item/melee/baton/proc/set_status(newstatus, mob/user)
 	if(bcell && bcell.charge >= hitcost)
 		if(status != newstatus)
 			change_status(newstatus)
-			to_chat(user, "<span class='notice'>[src] is now [status ? "on" : "off"].</span>")
-			playsound(loc, pick('sound/effects/electric/spark8.ogg', 'sound/effects/electric/spark9.ogg', 'sound/effects/electric/spark10.ogg'), 70, FALSE, -1)
+			to_chat(user, "<span class='notice'>[src] goes [status ? "HONK" : "...honk"].</span>")
+			playsound(loc, 'sound/items/bikehorn.ogg', status ? 60 : 30, FALSE, -1)
 	else
 		change_status(0)
 		if(!bcell)
 			to_chat(user, "<span class='warning'>[src] does not have a power source!</span>")
 		else
-			to_chat(user,  "<span class='warning'>[src] is out of charge.</span>")
+			to_chat(user, "<span class='warning'>[src] is out of charge.</span>")
 
 // Proc to -actually- change the status, and update the icons as well.
 // Also exists to ease "helpful" admin-abuse in case an bug prevents attack_self
@@ -167,15 +168,15 @@
 
 	else if(!status)
 		if(affecting)
-			target.visible_message("<span class='warning'>[target] has been prodded in the [affecting.name] with [src] by [user]. Luckily it was off.</span>")
+			target.visible_message("<span class='notice'>[target] has been bopped on the [affecting.name] with [src] by [user]. Luckily it's off. *poing*</span>")
 		else
-			target.visible_message("<span class='warning'>[target] has been prodded with [src] by [user]. Luckily it was off.</span>")
+			target.visible_message("<span class='notice'>[target] has been bopped with [src] by [user]. Luckily it's off. *poing*</span>")
 	else
 		if(affecting)
-			target.visible_message("<span class='danger'>[target] has been prodded in the [affecting.name] with [src] by [user]!</span>")
+			target.visible_message("<span class='notice'><b>[target]</b> gets bopped on the [affecting.name] by [user]! *BONK*</span>")
 		else
-			target.visible_message("<span class='danger'>[target] has been prodded with [src] by [user]!</span>")
-		playsound(loc, SFX_STUNSTICK_HIT, 70, FALSE, -1)
+			target.visible_message("<span class='notice'><b>[target]</b> gets bopped by [user]! *BONK*</span>")
+		playsound(loc, 'sound/items/bikehorn.ogg', 70, FALSE, -1)
 
 	//stun effects
 	if(status)

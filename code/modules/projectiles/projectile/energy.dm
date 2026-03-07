@@ -68,18 +68,22 @@
 
 //////////////////////////////////////////////////////
 
+// APRIL FOOLS BUILD: electrodes are confetti bolts. Same stats, festive presentation.
 /obj/item/projectile/energy/electrode
-	name = "electrode"
-	icon_state = "electrode"
-	fire_sound = 'sound/effects/weapons/energy/Taser.ogg'
+	name = "confetti burst"
+	icon_state = "spark"
+	fire_sound = 'sound/items/bikehorn.ogg'
 	nodamage = TRUE
 	agony = 65
 	tasing = 6
 	damage_type = PAIN
 	armor_penetration = 25
-	//Damage will be handled on the MOB side, to prevent window shattering.
 	projectile_light = TRUE
-	projectile_brightness_color = COLOR_YELLOW
+	projectile_brightness_color = "#FF88FF"
+
+/obj/item/projectile/energy/electrode/Initialize()
+	. = ..()
+	color = pick("#FF6666", "#FFEE44", "#66FF66", "#FF44FF", "#66CCFF")
 
 /obj/item/projectile/energy/electrode/small
 	icon_state = "electrode-small"

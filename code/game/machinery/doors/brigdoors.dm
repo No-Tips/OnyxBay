@@ -123,6 +123,16 @@
 		if(C.opened && !C.close())	continue
 		C.locked = 1
 		C.icon_state = C.icon_locked
+
+	// APRIL FOOLS: brig cell party — confetti and a balloon for the new guest.
+	var/turf/T = get_turf(src)
+	if(T)
+		for(var/turf/simulated/floor/F in range(2, T))
+			if(prob(55))
+				new /obj/effect/decal/cleanable/confetti(F)
+		new /obj/item/balloon/normal(T)
+		playsound(T, 'sound/items/champagne_pop.ogg', 70, TRUE, 0)
+
 	return 1
 
 

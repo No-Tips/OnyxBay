@@ -110,33 +110,63 @@ meteor_act
 	..(stun_amount, agony_amount, def_zone)
 
 // Less realistic, more combat-friendly stun handling than the proc above. Used by tasers and batons.
+// APRIL FOOLS BUILD: stun response replaced with laughter, confetti and honking.
+// Same armor interaction and stun duration — different experience entirely.
 /mob/living/carbon/human/proc/handle_tasing(power, tasing, def_zone, used_weapon = null)
 	if(status_flags & GODMODE)
-		return 0	//godmode
+		return 0
 
-	var/siemens_coeff = 1.0
 	var/obj/item/organ/external/affected = get_organ(check_zone(def_zone))
-	if(affected)
-		siemens_coeff = get_siemens_coefficient_organ(affected)
+	var/siemens_coeff = affected ? get_siemens_coefficient_organ(affected) : 1.0
 	if(siemens_coeff <= 0)
 		return
-	flash_pain()
-	forcesay(GLOB.hit_appends)
 
-	var/reduced_power = power * siemens_coeff
-	apply_damage(reduced_power, PAIN, def_zone, 0, used_weapon)
-	damage_poise(reduced_power / 5) // So metazine-filled junkies are still prone to muscular cramps
+	new /obj/effect/decal/cleanable/confetti(get_turf(src))
+	playsound(loc, 'sound/items/bikehorn.ogg',    60, TRUE,  -1)
+	playsound(loc, 'sound/items/sitcom_laugh.ogg', 80, FALSE, -1)
 
-	var/reduced_tasing = round(max(tasing * 0.5, tasing * siemens_coeff)) // Armor can provide up to 50% stun time reduction
+	apply_damage(power * siemens_coeff, PAIN, def_zone, 0, used_weapon)
+	damage_poise(power * siemens_coeff / 5)
+
+	var/reduced_tasing = round(max(tasing * 0.5, tasing * siemens_coeff))
 	apply_effect(STUTTER, reduced_tasing)
 	apply_effect(EYE_BLUR, reduced_tasing)
+	slurring = max(slurring, round(reduced_tasing * 0.5))
+
+	INVOKE_ASYNC(src, /mob/living/carbon/human/proc/laugh_loop, reduced_tasing)
 
 	if(poise <= 0 || getHalLoss() >= species.total_health || affected?.pain > species.total_health)
-		if(prob(95)) // May gods decide your destiny
+		if(prob(95))
 			if(!stunned)
-				visible_message("<b>[src]</b> collapses!", SPAN("warning", "You collapse from shock!"))
+				visible_message(
+					"<b>[src]</b> collapses into a giggling heap!",
+					SPAN("warning", "You collapse — you can't stop laughing!")
+				)
+				playsound(loc, 'sound/items/ba_dum_tss.ogg', 70, FALSE, -1)
 			Stun(reduced_tasing)
-			Weaken(reduced_tasing + 1) // Getting up after being tased is not instant, adding 1 tick of unstunned crawling
+			Weaken(reduced_tasing + 1)
+
+/mob/living/carbon/human/proc/laugh_loop(ticks)
+	// Pick gender-appropriate laugh pool
+	var/list/laugh_sounds
+	if(gender == FEMALE)
+		laugh_sounds = list(
+			'sound/mobs/humanoids/human/laugh/womanlaugh.ogg',
+			'sound/mobs/non-humanoids/clown/hehe.ogg'
+		)
+	else
+		laugh_sounds = list(
+			'sound/mobs/humanoids/human/laugh/manlaugh1.ogg',
+			'sound/mobs/humanoids/human/laugh/manlaugh2.ogg',
+			'sound/mobs/non-humanoids/clown/hehe.ogg'
+		)
+	var/end_time = world.time + (ticks * 5)
+	while(world.time < end_time && !QDELETED(src) && !is_ooc_dead())
+		if(stat == DEAD)
+			break
+		emote(pick("laugh", "giggle", "chuckle"))
+		playsound(loc, pick(laugh_sounds), 40, TRUE, -1)
+		sleep(rand(4, 8))
 
 
 //////////////////////

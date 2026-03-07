@@ -44,6 +44,37 @@
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "flour"
 
+// APRIL FOOLS: confetti left behind by tased suspects. Mopped like any other cleanable.
+/obj/effect/decal/cleanable/confetti
+	name = "confetti"
+	desc = "The aftermath of a very good arrest."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	icon = 'icons/effects/confetti_and_decor.dmi'
+	icon_state = "confetti"
+
+/obj/effect/decal/cleanable/confetti/Initialize()
+	. = ..()
+	color = pick("#FF6666", "#FF9944", "#FFEE44", "#66FF66", "#66CCFF", "#CC66FF", "#FF66CC")
+
+// APRIL FOOLS: glitter trail left by party poppers and bikehorn hits.
+/obj/effect/decal/cleanable/glitter
+	name = "glitter"
+	desc = "Impossible to fully clean up. It's everywhere."
+	gender = PLURAL
+	density = 0
+	anchored = 1
+	icon = 'icons/effects/glitter.dmi'
+	icon_state = "glitter"
+	random_icon_states = list("glitter", "glitter_sparkle1", "glitter_sparkle2", "glitter_sparkle3",
+	                          "glitter_sparkle4", "glitter_sparkle5", "glitter_sparkle6", "glitter_sparkle7",
+	                          "glitter_sparkle8", "glitter_sparkle9")
+
+/obj/effect/decal/cleanable/glitter/Initialize()
+	. = ..()
+	color = pick("#FF88FF", "#88FFFF", "#FFFF44", "#FF8844", "#88FF88")
+
 /obj/effect/decal/cleanable/greenglow
 	name = "glowing goo"
 	desc = "Jeez. I hope that's not for lunch."

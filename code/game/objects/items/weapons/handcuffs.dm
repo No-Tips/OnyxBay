@@ -1,12 +1,14 @@
 #define SYNDICUFFS_ON_APPLY 0
 #define SYNDICUFFS_ON_REMOVE 1
 
+// APRIL FOOLS BUILD: fuzzy pink handcuffs. Fancy but functional.
 /obj/item/handcuffs
 	name = "handcuffs"
 	desc = "Use this to keep prisoners in line."
 	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "handcuff"
+	icon = 'icons/obj/handcuffs.dmi'
+	icon_state = "fuzzycuff"
+	color = "#FF88FF"
 	obj_flags = OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BELT
 	force = 5.0
@@ -29,9 +31,9 @@
 
 /obj/item/handcuffs/get_icon_state(slot)
 	if(slot == slot_handcuffed_str)
-		return "handcuff1"
+		return "handcuff_all"
 	if(slot == slot_legcuffed_str)
-		return "legcuff1"
+		return "legcuff"
 	return ..()
 
 /obj/item/handcuffs/attack(mob/living/carbon/C, mob/living/user)
@@ -109,6 +111,8 @@
 		user.drop(cuffs, force = TRUE)
 	target.equip_to_slot(cuffs, slot_handcuffed)
 	on_restraint_apply(src)
+	// APRIL FOOLS: sad trombone for the arrestee and anyone immediately adjacent.
+	playsound(target.loc, 'sound/misc/sadtrombone.ogg', 80, FALSE, -6)
 	return 1
 
 var/last_chew = 0

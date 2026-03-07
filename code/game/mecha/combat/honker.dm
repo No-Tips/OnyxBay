@@ -95,6 +95,10 @@
 						<div class='header'>Sounds of HONK:</div>
 						<div class='links'>
 						<a href='?src=\ref[src];play_sound=sadtrombone'>Sad Trombone</a>
+						<a href='?src=\ref[src];play_sound=hehe'>Hehe</a>
+						<a href='?src=\ref[src];play_sound=evillaugh'>Evil Laugh</a>
+						<a href='?src=\ref[src];play_sound=sitcom'>Sitcom Laugh</a>
+						<a href='?src=\ref[src];play_sound=honktheme'>HONK Theme</a>
 						</div>
 						</div>
 						"}
@@ -128,6 +132,14 @@
 		switch(href_list["play_sound"])
 			if("sadtrombone")
 				playsound(src, 'sound/misc/sadtrombone.ogg', 100)
+			if("hehe")
+				playsound(src, 'sound/mobs/non-humanoids/clown/hehe.ogg', 100, TRUE)
+			if("evillaugh")
+				playsound(src, 'sound/mobs/non-humanoids/honkbot/honkbot_evil_laugh.ogg', 100, TRUE)
+			if("sitcom")
+				playsound(src, 'sound/items/sitcom_laugh.ogg', 100)
+			if("honktheme")
+				playsound(src, 'sound/music/honk_theme.ogg', 80)
 	return
 
 /proc/rand_hex_color()

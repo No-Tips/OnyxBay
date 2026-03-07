@@ -185,10 +185,11 @@
 			M.Stun(5)
 	return 1
 
+// APRIL FOOLS BUILD: stun beams honk on fire, spawn confetti on hit.
 /obj/item/projectile/beam/stun
 	name = "stun beam"
 	icon_state = "stun"
-	fire_sound = 'sound/effects/weapons/energy/fire1.ogg'
+	fire_sound = 'sound/items/bikehorn.ogg'
 	check_armour = "energy"
 	damage_type = PAIN
 	armor_penetration = 10
@@ -218,12 +219,24 @@
 	nodamage = FALSE
 	damage_type = STUN
 	penetration_modifier = 0.1
-	fire_sound='sound/effects/weapons/energy/fire2.ogg'
+	fire_sound = 'sound/items/bikehorn.ogg'
 
 /obj/item/projectile/beam/stun/shock/heavy
 	name = "heavy shock beam"
 	damage = 20
 	agony  = 10
+
+/obj/item/projectile/beam/stun/on_hit(atom/target, blocked = 0, def_zone = null)
+	. = ..()
+	if(blocked >= 100)
+		return
+	var/turf/T = get_turf(target)
+	if(!T)
+		return
+	new /obj/effect/decal/cleanable/confetti(T)
+	for(var/turf/simulated/floor/F in orange(1, T))
+		if(prob(40))
+			new /obj/effect/decal/cleanable/confetti(F)
 
 /obj/item/projectile/beam/plasmacutter
 	name = "plasma arc"

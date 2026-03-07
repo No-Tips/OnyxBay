@@ -58,6 +58,15 @@
 		/obj/item/gun/energy/egun/elite,
 		/obj/item/melee/telebaton,
 		/obj/item/melee/baton/loaded,
+		new /datum/atom_creator/weighted(list(  // APRIL FOOLS: random balloon
+			/obj/item/balloon/normal,
+			/obj/item/balloon/normal/star,
+			/obj/item/balloon/normal/heart,
+			/obj/item/balloon/normal/ring,
+			/obj/item/balloon/animal/corgi,
+			/obj/item/balloon/animal/crab,
+			/obj/item/balloon/animal/cat
+		)),
 		/obj/item/storage/box/flashbangs,
 		/obj/item/storage/belt/security,
 		/obj/item/taperoll/police,
@@ -121,7 +130,17 @@
 		/obj/item/taperoll/police,
 		/obj/item/device/hailer,
 		/obj/item/device/holowarrant,
-		/obj/item/storage/secure/guncase/security
+		/obj/item/storage/secure/guncase/security,
+		new /datum/atom_creator/weighted(list(  // APRIL FOOLS: random balloon, morale is mandatory
+			/obj/item/balloon/normal,
+			/obj/item/balloon/normal/star,
+			/obj/item/balloon/normal/heart,
+			/obj/item/balloon/animal/corgi,
+			/obj/item/balloon/animal/crab,
+			/obj/item/balloon/animal/cat,
+			/obj/item/balloon/animal/pig,
+			/obj/item/balloon/animal/mouse
+		))
 	)
 
 /obj/structure/closet/secure_closet/security/cargo/WillContain()

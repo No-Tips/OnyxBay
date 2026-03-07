@@ -1,96 +1,50 @@
+// APRIL FOOLS BUILD: flashbang replaced with party popper.
+// Same detonation radius and pin mechanics. Confetti, glitter, mild stun. No blinding or deafening.
 /obj/item/grenade/flashbang
-	name = "flashbang"
+	name = "party popper"
+	desc = "Pull the pin and celebrate! Security-grade festive incapacitation."
 	icon_state = "flashbang"
 	item_state = "flashbang"
 	origin_tech = list(TECH_MATERIAL = 2, TECH_COMBAT = 1)
+	arm_sound = 'sound/items/party_horn.ogg'
 	var/banglet = 0
 
 /obj/item/grenade/flashbang/detonate()
 	..()
-
-	var/list/victims = list()
-	var/list/objs = list()
 	var/turf/T = get_turf(src)
+	if(!T)
+		qdel(src)
+		return
 
-	get_listeners_in_range(T, 7, victims, objs)
+	// Confetti and glitter burst in radius
+	for(var/turf/simulated/floor/F in range(4, T))
+		if(prob(60))
+			new /obj/effect/decal/cleanable/confetti(F)
+		if(prob(30))
+			new /obj/effect/decal/cleanable/glitter(F)
+	new /obj/effect/decal/cleanable/confetti(T)
+	new /obj/effect/decal/cleanable/glitter(T)
 
-	for(var/mob/living/carbon/C in victims)
-		bang(T, C)
+	playsound(T, 'sound/items/champagne_pop.ogg', 80, TRUE,  5)
+	playsound(T, 'sound/items/sitcom_laugh.ogg',  60, FALSE, 5)
 
-	new /obj/effect/sparks(loc)
-	new /obj/effect/effect/smoke/illumination(loc, 5, range = 30, power = 1, color = "#ffffff")
+	// Mild stun for nearby mobs — no blindness, no deafness
+	for(var/mob/living/carbon/C in range(3, T))
+		if(C.stat == DEAD)
+			continue
+		var/dist = get_dist(C, T)
+		var/stun = max(0, 4 - dist)
+		if(stun > 0)
+			bang(T, C, stun)
+
 	qdel(src)
-	return
 
-/obj/item/grenade/flashbang/proc/bang(turf/T , mob/living/carbon/M) // Added a new proc called 'bang' that takes a location and a person to be banged.
-	to_chat(M, SPAN("danger", "*BANG*"))                // Called during the loop that bangs people in lockers/containers and when banging
-	playsound(loc, GET_SFX(SFX_BANG), 50, 1, 30) // people in normal view. Could theroetically be called during other explosions.
-															// -- Polymorph
-	// Checking for protections
-	var/eye_effect = 0
-	var/ear_effect = 0
-	if(iscarbon(M))
-		eye_effect = M.eyecheck()
-		ear_effect = M.get_ear_protection()
-
-	// Checking for distance tresholds
-	var/distance_tier = 1
-	if(M == loc)
-		distance_tier = 7
-	else if(get_dist(M, T) <= 1)
-		distance_tier = 5
-	else if(get_dist(M, T) <= 3)
-		distance_tier = 3
-	else if(get_dist(M, T) <= 5)
-		distance_tier = 2
-
-	eye_effect = distance_tier - eye_effect
-	ear_effect = distance_tier - ear_effect
-
-	// Blinding effect
-	if(eye_effect >= 6)
-		M.Stun(eye_effect)
-		M.Weaken(eye_effect * 1.5)
-
-	if(eye_effect >= 5)
-		M.confused = max(M.confused, eye_effect) // No need to stack these
-
-	if(eye_effect >= 3)
-		M.eye_blurry += 3*eye_effect // But stacking these doesn't hurt too much
-
-	if(eye_effect >= 0)
-		M.flash_eyes(intensity = INFINITY, type = /atom/movable/screen/fullscreen/flash/persistent, effect_duration = (10 * eye_effect))
-
-	// Deafening effect
-	if(ear_effect >= 3)
-		M.Stun(ear_effect)
-		M.Weaken(ear_effect)
-
-	if(ear_effect >= 1)
-		if(prob(ear_effect * 2) || (M == loc && prob(70)))
-			M.adjustEarDamage(rand(1, 10), null)
-		else
-			M.adjustEarDamage(rand(0, 5), null)
-		M.setEarDamage(null, max(M.ear_deaf, ear_effect * 3))
-
-	// This really should be in mob not every check
-	if(ishuman(M))
-		var/mob/living/carbon/human/H = M
-		var/obj/item/organ/internal/eyes/E = H.internal_organs_by_name[BP_EYES]
-		if(istype(E) && E.damage >= E.min_bruised_damage)
-			to_chat(M, SPAN("danger", "Your eyes start to burn badly!"))
-			if(!banglet && !istype(src, /obj/item/grenade/flashbang/clusterbang))
-				if(E.damage >= E.min_broken_damage)
-					to_chat(M, SPAN("danger", "You can't see anything!"))
-	if(M.ear_damage >= 15)
-		to_chat(M, SPAN("danger", "Your ears start to ring badly!"))
-		if(!banglet && !istype(src, /obj/item/grenade/flashbang/clusterbang))
-			if(prob(M.ear_damage - 5))
-				to_chat(M, SPAN("danger", "You can't hear anything!"))
-				M.sdisabilities |= DEAF
-	else
-		if(M.ear_damage >= 5)
-			to_chat(M, SPAN("danger", "Your ears start to ring!"))
+/obj/item/grenade/flashbang/proc/bang(turf/T, mob/living/carbon/M, stun)
+	to_chat(M, SPAN("notice", "HONK! Confetti explodes around you!"))
+	playsound(M.loc, 'sound/items/bikehorn.ogg', 50, TRUE, 10)
+	M.Stun(stun)
+	M.Weaken(stun)
+	M.confused = max(M.confused, stun * 2)
 	M.update_icons()
 
 /obj/item/grenade/flashbang/instant/Initialize()

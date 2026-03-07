@@ -193,7 +193,7 @@
 	item_icons = list()
 	update_held_icon()
 
-	playsound(get_turf(src), 'sound/effects/snap.ogg', 100, 1)
+	playsound(get_turf(src), 'sound/items/balloon_pop.ogg', 100, 1)
 
 /obj/item/balloon/verb/deflate()
 	set name = "Deflate"
