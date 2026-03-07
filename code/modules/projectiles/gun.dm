@@ -119,6 +119,10 @@
 
 /obj/item/gun/Initialize()
 	. = ..()
+	// APRIL FOOLS: random balloon tint (sprites are remapped to 170-255 lum so tinting works)
+	color = pick("#FF4040","#FF9922","#FFEE22","#44CC44","#33AAFF","#AA44FF","#FF44BB","#FF6688","#44EEBB")
+	// Squeaky hit for pistol-whipping
+	hitsound = pick('sound/items/toy_squeak/toysqueak1.ogg','sound/items/toy_squeak/toysqueak2.ogg','sound/items/toy_squeak/toysqueak3.ogg')
 	for(var/i in 1 to firemodes.len)
 		firemodes[i] = new /datum/firemode(src, firemodes[i])
 
@@ -523,6 +527,12 @@
 
 //does the actual launching of the projectile
 /obj/item/gun/proc/process_projectile(obj/projectile, atom/movable/firer, atom/target, target_zone, params=null)
+	// APRIL FOOLS: 5% chance to fire a balloon instead
+	if(prob(5))
+		qdel(projectile)
+		var/obj/item/projectile/beam/balloon_shot/B = new(get_turf(src))
+		B.launch(target, target_zone, firer, null, src)
+		return 1
 	var/obj/item/projectile/P = projectile
 	if(!istype(P))
 		return 0 //default behaviour only applies to true projectiles

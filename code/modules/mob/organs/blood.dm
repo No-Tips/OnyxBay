@@ -289,7 +289,7 @@
 		if(source.data["blood_type"])
 			B.blood_DNA[source.data["blood_DNA"]] = source.data["blood_type"]
 		else
-			B.blood_DNA[source.data["blood_DNA"]] = "O+"
+			B.blood_DNA[source.data["blood_DNA"]] = "Mai Tai"
 
 	// Update virus information.
 	if(source.data["virus2"])

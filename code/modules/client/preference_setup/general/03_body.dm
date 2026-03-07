@@ -1,8 +1,8 @@
-var/global/list/valid_bloodtypes = list("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-")
+var/global/list/valid_bloodtypes = list("Pina Colada", "Mojito", "Margarita", "Daiquiri", "Sangria", "Blue Lagoon", "Mai Tai", "Cosmopolitan")
 
 /datum/preferences
 	var/species = SPECIES_HUMAN         //Species datum to use.
-	var/b_type = "A+"					//blood type (not-chooseable)
+	var/b_type = "Pina Colada"				//blood type (not-chooseable)
 	var/h_style = "Short Hair"			//Hair type
 	var/r_hair = 0						//Hair color
 	var/g_hair = 0						//Hair color

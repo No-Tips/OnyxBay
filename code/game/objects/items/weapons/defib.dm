@@ -365,6 +365,17 @@
 	make_announcement("pings", "Resuscitation successful.", "notice")
 	playsound(src, 'sound/machines/defib_success.ogg', 50, 0)
 	H.resuscitate()
+	// APRIL FOOLS: beach party revival!
+	var/turf/revival_turf = get_turf(H)
+	if(revival_turf)
+		playsound(revival_turf, 'sound/items/balloon_pop.ogg', 75, TRUE)
+		var/obj/item/balloon/normal/party_balloon = new(revival_turf)
+		party_balloon.color = pick(BALLOON_COLORS)
+		for(var/turf/simulated/floor/F in orange(2, revival_turf))
+			if(prob(50))
+				new /obj/effect/decal/cleanable/confetti(F)
+		new /obj/effect/decal/cleanable/confetti(revival_turf)
+	H.visible_message(SPAN_NOTICE("<b>*** BEACH PARTY REVIVAL! [H] is back from the dead! Break out the sunscreen! ***</b>"))
 	var/obj/item/organ/internal/cell/potato = H.internal_organs_by_name[BP_CELL]
 	if(istype(potato) && potato.cell)
 		var/obj/item/cell/C = potato.cell

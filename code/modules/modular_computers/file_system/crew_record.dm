@@ -1,5 +1,5 @@
 GLOBAL_LIST_EMPTY(all_crew_records)
-GLOBAL_LIST_INIT(blood_types, list("A-", "A+", "B-", "B+", "AB-", "AB+", "O-", "O+"))
+GLOBAL_LIST_INIT(blood_types, list("Mojito", "Pina Colada", "Daiquiri", "Margarita", "Blue Lagoon", "Sangria", "Cosmopolitan", "Mai Tai"))
 GLOBAL_LIST_INIT(physical_statuses, list("Active", "Disabled", "SSD", "Deceased"))
 GLOBAL_VAR_INIT(default_physical_status, "Active")
 GLOBAL_LIST_INIT(mental_statuses, list("Stable", "Watch", "Unstable", "Insane"))
@@ -378,6 +378,14 @@ FIELD_CONTEXT_EDIT(criminalStatus, CONTEXT(security))
 				status = "<font color='[clr]'><b>[value]</b></font>"
 
 			GLOB.global_announcer.autosay("<b>[R.get_name()]</b> security status is changed to [status]!", "<b>Security Records Announcer</b>", "Security")
+
+			// APRIL FOOLS: tag party poopers
+			if(value == "Arrest" || value == "Wanted")
+				var/cur_crimes = R.get_major_crimes()
+				if(!findtext(cur_crimes, "Party Pooper"))
+					R.set_major_crimes(cur_crimes && cur_crimes != "None" ? "[cur_crimes], Party Pooper" : "Party Pooper", TRUE)
+				GLOB.global_announcer.autosay("<font color='red'><b>PARTY POOPER ALERT:</b></font> <b>[R.get_name()]</b> has been identified as a Party Pooper! All units respond!", "<b>Security Records Announcer</b>", "Security")
+				GLOB.global_announcer.autosay("<b>ATTENTION ALL STAFF:</b> A Party Pooper has been detected aboard the station. Security has been dispatched to restore festive order.", "<b>Station Announcement System</b>")
 
 
 FIELD_LONG_SECURE("Major Crimes", major_crimes, FALSE, access_security);

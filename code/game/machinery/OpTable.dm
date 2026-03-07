@@ -1,10 +1,10 @@
 /obj/machinery/optable
-	name = "Operating Table"
-	desc = "Used for advanced medical procedures."
+	name = "Beach Lounger"
+	desc = "A comfortable place to lie down and catch some rays. Also used for advanced medical procedures."
 
-	icon = 'icons/obj/machines/surgery_table.dmi'
-	icon_state = "surgery_table-idle"
-	base_icon_state = "surgery_table"
+	icon = 'icons/obj/furniture.dmi'
+	icon_state = "bed"
+	base_icon_state = "bed"
 
 	density = 1
 	anchored = 1.0
@@ -29,6 +29,8 @@
 
 /obj/machinery/optable/Initialize()
 	. = ..()
+	// APRIL FOOLS: tropical beach bed vibes
+	color = pick("#FF9944","#FFDD44","#44DDAA","#44CCFF","#FF6688","#AAFFCC")
 
 	var/obj/machinery/computer/operating/comp = locate(/obj/machinery/computer/operating) in orange(2, src)
 	if(istype(comp) && !comp.optable)
@@ -42,24 +44,15 @@
 
 	RefreshParts()
 
-	emissive_overlay = emissive_appearance(icon, "surgery_table_ea")
+	// APRIL FOOLS: no emissive on beach lounger (no surgery_table_ea in furniture.dmi)
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/machinery/optable/LateInitialize()
 	update_icon()
 
 /obj/machinery/optable/on_update_icon()
-	CutOverlays(emissive_overlay)
-	var/should_glow = update_glow()
-	if(should_glow)
-		AddOverlays(emissive_overlay)
-
-	if(stat & (BROKEN | NOPOWER) || isnull(victim_ref))
-		icon_state = "[base_icon_state]-idle"
-		return
-
-	var/mob/living/carbon/human/victim = victim_ref?.resolve()
-	icon_state = "[base_icon_state][victim?.pulse() ? "-active" : "-idle"]"
+	// APRIL FOOLS: beach lounger, no emissive needed
+	icon_state = "bed"
 
 /obj/machinery/optable/proc/update_glow()
 	if(inoperable(MAINT))

@@ -32,8 +32,11 @@
 
 /obj/item/reagent_containers/syringe/Initialize()
 	. = ..()
+	// APRIL FOOLS: fun injector with festive colors
+	name = "fun injector"
+	color = pick("#FF6666","#FF9933","#FFDD33","#66CC66","#33AAFF","#CC66FF","#FF66AA")
 	if(mode != SYRINGE_PACKAGED && starting_label)
-		name = "syringe"
+		name = "fun injector"
 		AddComponent(/datum/component/label, starting_label) // So the name isn't hardcoded and the label can be removed for reusability
 	update_icon()
 

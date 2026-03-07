@@ -221,6 +221,35 @@
 	penetration_modifier = 0.1
 	fire_sound = 'sound/items/bikehorn.ogg'
 
+// APRIL FOOLS: 5% chance gun fires one of these instead of the real thing
+/obj/item/projectile/beam/balloon_shot
+	name = "balloon"
+	icon_state = "stun"
+	color = "#FF88FF"
+	fire_sound = 'sound/items/toy_squeak/toysqueak1.ogg'
+	check_armour = "none"
+	damage_type = PAIN
+	nodamage = TRUE
+	sharp = FALSE
+	damage = 0
+	agony = 0
+	tasing = 0
+	muzzle_type = /obj/effect/projectile/muzzle/stun
+	tracer_type = /obj/effect/projectile/tracer/stun
+	impact_type = /obj/effect/projectile/impact/stun
+
+/obj/item/projectile/beam/balloon_shot/on_hit(atom/target, blocked = 0, def_zone = null)
+	. = ..()
+	var/turf/T = get_turf(target)
+	if(!T)
+		return
+	playsound(T, 'sound/items/balloon_pop.ogg', 70, TRUE)
+	new /obj/item/balloon/normal(T)
+	new /obj/effect/decal/cleanable/confetti(T)
+	for(var/turf/simulated/floor/F in orange(1, T))
+		if(prob(50))
+			new /obj/effect/decal/cleanable/confetti(F)
+
 /obj/item/projectile/beam/stun/shock/heavy
 	name = "heavy shock beam"
 	damage = 20

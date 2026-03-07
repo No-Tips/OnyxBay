@@ -165,22 +165,22 @@
 		reagents.add_reagent(/datum/reagent/blood, volume, list("donor" = null, "blood_DNA" = null, "blood_type" = blood_type, "trace_chem" = null, "virus2" = list(), "antibodies" = list()))
 
 /obj/item/reagent_containers/ivbag/blood/APlus
-	blood_type = "A+"
+	blood_type = "Pina Colada"
 
 /obj/item/reagent_containers/ivbag/blood/AMinus
-	blood_type = "A-"
+	blood_type = "Mojito"
 
 /obj/item/reagent_containers/ivbag/blood/BPlus
-	blood_type = "B+"
+	blood_type = "Margarita"
 
 /obj/item/reagent_containers/ivbag/blood/BMinus
-	blood_type = "B-"
+	blood_type = "Daiquiri"
 
 /obj/item/reagent_containers/ivbag/blood/OPlus
-	blood_type = "O+"
+	blood_type = "Mai Tai"
 
 /obj/item/reagent_containers/ivbag/blood/OMinus
-	blood_type = "O-"
+	blood_type = "Cosmopolitan"
 
 /obj/item/reagent_containers/ivbag/saline
 	name = "\improper IV bag (saline)"

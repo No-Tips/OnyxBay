@@ -180,7 +180,7 @@
 
 	// for making sure the roundstart species has the right blood pack sent to them
 	var/mob/living/carbon/human/carbon_target = holder
-	carbon_target.dna.b_type = "O-"
+	carbon_target.dna.b_type = "Cosmopolitan"
 
 /datum/modifier/trait/blooddeficiency/proc/lose_blood()
 	if(holder.stat == DEAD)

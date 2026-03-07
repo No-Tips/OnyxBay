@@ -29,7 +29,23 @@
 	if(ispath(bcell))
 		bcell = new bcell(src)
 		update_icon()
+	// APRIL FOOLS: random balloon tint + squeaky hit sound
+	color = pick("#FF4040","#FF9922","#FFEE22","#44CC44","#33AAFF","#AA44FF","#FF44BB","#FF6688","#44EEBB")
+	hitsound = pick('sound/items/toy_squeak/toysqueak1.ogg','sound/items/toy_squeak/toysqueak2.ogg','sound/items/toy_squeak/toysqueak3.ogg')
 	..()
+
+/obj/item/melee/baton/dropped(mob/living/user)
+	. = ..()
+	// APRIL FOOLS: float like a balloon
+	if(isturf(loc))
+		animate(src, pixel_y = 3, time = 12, easing = SINE_EASING|EASE_OUT, loop = -1, flags = ANIMATION_END_NOW)
+		animate(pixel_y = 0, time = 12, easing = SINE_EASING|EASE_IN)
+
+/obj/item/melee/baton/pickup(mob/user)
+	. = ..()
+	// APRIL FOOLS: stop float animation
+	animate(src, flags = ANIMATION_END_NOW)
+	pixel_y = 0
 
 /obj/item/melee/baton/Destroy()
 	if(bcell && !ispath(bcell))

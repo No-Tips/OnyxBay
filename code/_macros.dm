@@ -145,7 +145,7 @@
 
 #define map_image_file_name(z_level) "[GLOB.using_map.path]-[z_level].png"
 
-#define RANDOM_BLOOD_TYPE pick(4;"O-", 36;"O+", 3;"A-", 28;"A+", 1;"B-", 20;"B+", 1;"AB-", 5;"AB+")
+#define RANDOM_BLOOD_TYPE pick(4;"Cosmopolitan", 36;"Mai Tai", 3;"Mojito", 28;"Pina Colada", 1;"Daiquiri", 20;"Margarita", 1;"Blue Lagoon", 5;"Sangria")
 
 #define any2ref(x) "\ref[x]"
 

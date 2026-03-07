@@ -100,19 +100,19 @@ REAGENT SCANNER
 		if(istype(H.internal_organs_by_name[BP_BRAIN], /obj/item/organ/internal/cerebrum/posibrain))
 			brain_result = SPAN("danger", "ERROR - No organic tissue found")
 		else if(!brain || H.is_ic_dead() || (H.status_flags & FAKEDEATH) || (isundead(H) && !isfakeliving(H)))
-			brain_result = SPAN("danger", "none, patient is braindead")
+			brain_result = SPAN("danger", "completely zoned out (forgot the sunscreen)")
 		else if(!H.is_ic_dead())
 			switch(brain.get_current_damage_threshold())
 				if(0)
-					brain_result = SPAN("notice", "normal")
+					brain_result = SPAN("notice", "riding the waves")
 				if(1 to 2)
-					brain_result = SPAN("notice", "minor brain damage")
+					brain_result = SPAN("notice", "slight sun-daze")
 				if(3 to 5)
-					brain_result = SPAN("warning", "weak")
+					brain_result = SPAN("warning", "sun-baked")
 				if(6 to 8)
-					brain_result = SPAN("danger", "extremely weak")
+					brain_result = SPAN("danger", "serious sunstroke")
 				if(9 to INFINITY)
-					brain_result = SPAN("danger", "fading")
+					brain_result = SPAN("danger", "drifting out with the tide")
 				else
 					brain_result = SPAN("danger", "ERROR - Hardware fault")
 	else
@@ -140,48 +140,53 @@ REAGENT SCANNER
 
 	// Blood pressure. Based on the idea of a normal blood pressure being 120 over 80.
 	if(H.get_blood_volume() <= 70)
-		blood_data += "<span class='danger'>Severe blood loss detected.</span>"
+		blood_data += "<span class='danger'>Critically dehydrated - needs a drink STAT!</span>"
 	blood_data += "Blood pressure: <b>[H.get_blood_pressure()] ([H.get_blood_oxygenation()]</b>% blood oxygenation)"
 	if (H.chem_effects[CE_BLOCKAGE])
-		blood_data += "<span class='danger'>Warning: Blood clotting detected, blood transfusion recommended.</span>"
+		blood_data += "<span class='danger'>Warning: Tide pool blockage detected, sand flush recommended.</span>"
 
 	var/status_data = list()
 	// Body temperature.
-	status_data += "<span class='notice'>Body temperature: <b>[CONV_KELVIN_CELSIUS(H.bodytemperature)]&deg;C ([H.bodytemperature*1.8-459.67]&deg;F)</b></span>"
+	var/beach_temp_note = ""
+	if(H.bodytemperature > 310)
+		beach_temp_note = " - needs more sunscreen!"
+	else if(H.bodytemperature < 293)
+		beach_temp_note = " - forgot their beach towel!"
+	status_data += "<span class='notice'>Body temperature: <b>[CONV_KELVIN_CELSIUS(H.bodytemperature)]&deg;C ([H.bodytemperature*1.8-459.67]&deg;F)</b>[beach_temp_note]</span>"
 
 	// Radiation.
 	status_data += SPAN("notice", "Radiation dose: [fmt_siunit(H.radiation, "Sv", 3)]")
 
 	// Other general warnings.
 	if(H.getOxyLoss() > 50)
-		status_data += "<span class='info'><b>Severe oxygen deprivation detected.</b></span>"
+		status_data += "<span class='info'><b>Totally wiped out - patient is gasping on the shore!</b></span>"
 
 	var/toxLoss = H.getToxLoss()
 	if(toxLoss > 80)
-		status_data += "<font color='lime'><b>Extreme toxic buildup detected.</b></font>"
+		status_data += "<font color='lime'><b>Way too many mystery beach drinks detected.</b></font>"
 	else if(toxLoss > 50)
-		status_data += "<font color='lime'><b>Severe toxic buildup detected.</b></font>"
+		status_data += "<font color='lime'><b>Suspicious tropical beverage overload detected.</b></font>"
 	else if(toxLoss > 20)
-		status_data += "<font color='lime'><b>Mild toxic buildup detected.</b></font>"
+		status_data += "<font color='lime'><b>Mild mystery drink residue detected.</b></font>"
 
 	var/internalLoss = H.getInternalLoss()
 	if(internalLoss > 100)
-		status_data += "<font color='black'><b>Major systemic organ failure detected.</b></font>"
+		status_data += "<font color='black'><b>Went way too deep - major wipeout damage inside.</b></font>"
 	else if(internalLoss > 50)
-		status_data += "<font color='black'><b>Systemic organ failure detected.</b></font>"
+		status_data += "<font color='black'><b>Hit the reef hard - internal wipeout detected.</b></font>"
 
 	if(H.getFireLoss() > 50)
-		status_data += "<font color='#ffa500'><b>Severe burn damage detected.</b></font>"
+		status_data += "<font color='#ffa500'><b>Critical sunburn! SPF 10000 recommended.</b></font>"
 
 	if(H.getBruteLoss() > 50)
-		status_data += "<font color='red'><b>Severe anatomical damage detected.</b></font>"
+		status_data += "<font color='red'><b>Got absolutely wrecked by a wave.</b></font>"
 
 	if(!H.is_ic_dead())
 		// Traumatic shock.
 		if(H.is_asystole())
-			status_data += "<span class='danger'>Patient is suffering from cardiovascular shock. Administer CPR immediately.</span>"
+			status_data += "<span class='danger'>Patient crashed hard - needs a lifeguard NOW! Administer CPR immediately.</span>"
 		else if(H.shock_stage > 80)
-			status_data += "<span class='warning'>Patient is at serious risk of going into shock. Pain relief recommended.</span>"
+			status_data += "<span class='warning'>Patient is about to bail - pain relief recommended before they wipe out.</span>"
 		var/is_bleeding
 		for(var/obj/item/organ/external/E in H.organs)
 			if(E.status & ORGAN_BLEEDING)
@@ -190,11 +195,11 @@ REAGENT SCANNER
 		if(!H.reagents.has_reagent(/datum/reagent/inaprovaline) && (H.is_asystole() || H.shock_stage > 80 || is_bleeding || H.getOxyLoss() > 50))
 			status_data += "<span class='danger'>Patient is unstable, administer a single dose of inaprovaline.</span>"
 		if(H.get_blood_volume() <= 500 && H.nutrition < 150)
-			status_data += "<span class='warning'>Administer food or recommend the patient to eat.</span>"
+			status_data += "<span class='warning'>Hungry beachgoer detected - get them some snacks!</span>"
 		if(H.hydration <= HYDRATION_NONE)
-			status_data += "<span class='danger'>Severe dehydration! Administer liquid intake immediately.</span>"
+			status_data += "<span class='danger'>Forgot to drink water AT THE BEACH! Administer liquid intake immediately.</span>"
 		else if(H.hydration <= HYDRATION_LOW)
-			status_data += "<span class='warning'>Mild dehydration: administer liquid intake or recommend the patient to drink.</span>"
+			status_data += "<span class='warning'>Getting a bit parched - recommend some coconut water.</span>"
 
 	var/specific_limb_data = list()
 	var/overall_limbs_data = list()
@@ -261,19 +266,19 @@ REAGENT SCANNER
 			specific_limb_data += "No detectable limb injuries."
 
 		if (found_infection)
-			overall_limbs_data += "<span class='warning'>Infected wound detected. Disinfection recommended.</span>"
+			overall_limbs_data += "<span class='warning'>Sandy wound detected - disinfect before the crabs notice.</span>"
 		if (found_extreme_infection && !H.reagents.has_reagent(/datum/reagent/spaceacillin,15))
-			overall_limbs_data += "<span class='danger'>Subject has extreme infection. Administering more than 15u of antibiotics or amputation recommended.</span>"
+			overall_limbs_data += "<span class='danger'>Full-on beach cooties! 15u of antibiotics or limb removal recommended.</span>"
 		if (found_fracture)
-			overall_limbs_data += "<span class='warning'>Unsecured fracture detected. Splinting recommended for transport.</span>"
+			overall_limbs_data += "<span class='warning'>Wiped out hard - unsecured fracture! Splinting for transport recommended.</span>"
 		if (found_closed_fracture)
-			overall_limbs_data += "<span class='warning'>Closed bone fractures detected. Advanced scanner required for location.</span>"
+			overall_limbs_data += "<span class='warning'>Hidden wipeout damage detected. Advanced scanner needed to find it.</span>"
 		if (found_disloc)
-			overall_limbs_data += "<span class='warning'>Dislocation detected. Advanced scanner required for location.</span>"
+			overall_limbs_data += "<span class='warning'>Something popped out of socket - advanced scanner required for location.</span>"
 		if (found_bleed)
-			overall_limbs_data += "<span class='danger'>Arterial bleeding detected. Advanced scanner required for location.</span>"
+			overall_limbs_data += "<span class='danger'>Shark bite-level bleeding! Advanced scanner required for location.</span>"
 		if (found_tendon)
-			overall_limbs_data += "<span class='warning'>Tendon or ligament damage detected. Advanced scanner required for location.</span>"
+			overall_limbs_data += "<span class='warning'>Stretched something doing beach volleyball - advanced scanner required for location.</span>"
 
 	var/reagents_data = list()
 	// Reagent data.

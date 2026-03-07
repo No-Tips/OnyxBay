@@ -287,6 +287,13 @@
  * * user - atom that fired this step.
  */
 /datum/surgery_step/proc/success(obj/item/organ/external/parent_organ, obj/item/organ/target_organ, mob/living/carbon/human/target, obj/item/tool, mob/user)
+	// APRIL FOOLS: celebrate successful surgery with confetti
+	var/turf/T = get_turf(target)
+	if(T)
+		new /obj/effect/decal/cleanable/confetti(T)
+		for(var/turf/simulated/floor/F in orange(1, T))
+			if(prob(30))
+				new /obj/effect/decal/cleanable/confetti(F)
 	return
 
 /**
@@ -340,6 +347,10 @@
 	playsound(get_turf(target), sound_file_use, 75, TRUE)
 
 /datum/surgery_step/proc/play_success_sound(mob/user, mob/living/carbon/target, obj/item/organ/target_organ, obj/item/tool)
+	// APRIL FOOLS: 20% chance to replace success sound with a toy squeak
+	if(prob(20))
+		playsound(get_turf(target), pick('sound/items/toy_squeak/toysqueak1.ogg','sound/items/toy_squeak/toysqueak2.ogg','sound/items/toy_squeak/toysqueak3.ogg'), 75, TRUE)
+		return
 	if(!success_sound)
 		return
 
